@@ -78,6 +78,10 @@ namespace TMKOC.BridgeQuest
         [Tooltip("Seconds the red takes to fade back to the option's normal colour once the hold ends.")]
         [SerializeField] private float wrongFlashFadeDuration = 0.3f;
 
+        [Header("Correct Answer Flash")]
+        [Tooltip("Colour the tapped option's fill snaps to on a correct answer -- same shake-and-flash language as a wrong tap, just green instead of red. Holds until Hide() clears the card (after correctHold), no separate fade needed.")]
+        [SerializeField] private Color correctFlashColor = new Color(0.25f, 0.80f, 0.30f, 1f);
+
         [Header("Accessibility")]
         [Tooltip("Colour questions must not rely on hue alone -- red/green is the most common deficiency. Leave on to show the colour's name under the swatch.")]
         [SerializeField] private bool labelColourOptions = true;
@@ -333,8 +337,11 @@ namespace TMKOC.BridgeQuest
             }
 
             // the prompt is only spoken once the card has landed -- a line that starts
-            // under a moving card reads as belonging to whatever came before it
-            BridgeQuestVoice.Play(current.promptVoiceKey);
+            // under a moving card reads as belonging to whatever came before it.
+            // PlayWhenReady rather than Play: the very first question can land before
+            // the category bundle has finished loading, and a dropped first line is
+            // worse than a short wait.
+            BridgeQuestVoice.PlayWhenReady(this, current.promptVoiceKey);
 
             accepting = true;
         }
@@ -344,12 +351,22 @@ namespace TMKOC.BridgeQuest
 
         private void RepeatPrompt()
         {
+            BridgeQuestSfx.Tap();
+            RepeatPromptSilently();
+        }
+
+        /// <summary>
+        /// Same replay as the tap-to-repeat button, minus the tap SFX -- for anything
+        /// that should re-speak the question on its own rather than in response to a
+        /// deliberate tap (e.g. BridgeQuestTutorial's stuck-nudge, repeating the
+        /// question each time the hint hand reappears).
+        /// </summary>
+        public void RepeatPromptSilently()
+        {
             if (current == null || answered) return;
 
-            BridgeQuestSfx.Tap();
-
-            // a deliberate tap on the replay button outranks anything a wrong answer
-            // queued -- otherwise the two would fight over the one AudioSource
+            // a deliberate/automatic repeat outranks anything a wrong answer queued --
+            // otherwise the two would fight over the one AudioSource
             if (wrongVoiceRoutine != null) { StopCoroutine(wrongVoiceRoutine); wrongVoiceRoutine = null; }
             if (repeatRoutine != null) StopCoroutine(repeatRoutine);
             repeatRoutine = StartCoroutine(RepeatRoutine());
@@ -370,7 +387,7 @@ namespace TMKOC.BridgeQuest
             // the child may have answered while 'Listen again.' was still speaking
             if (current == null || answered) { repeatRoutine = null; yield break; }
 
-            BridgeQuestVoice.Play(current.promptVoiceKey);
+            BridgeQuestVoice.PlayWhenReady(this, current.promptVoiceKey);
             repeatRoutine = null;
         }
 
@@ -403,6 +420,8 @@ namespace TMKOC.BridgeQuest
                 view.rect.DOKill();
                 view.rect.DOPunchScale(Vector3.one * 0.25f, 0.35f, 8, 0.8f).SetUpdate(true);
             }
+
+            FlashCorrect(slot);
 
             BridgeQuestAudioMapper voice = BridgeQuestVoice.Mapper;
             if (voice != null) BridgeQuestVoice.Play(voice.GetRandomCorrect());
@@ -488,7 +507,7 @@ namespace TMKOC.BridgeQuest
             // The praise line is already in flight by then and must not be talked over.
             if (current == null || answered) { wrongVoiceRoutine = null; yield break; }
 
-            BridgeQuestVoice.Play(current.promptVoiceKey);
+            BridgeQuestVoice.PlayWhenReady(this, current.promptVoiceKey);
             wrongVoiceRoutine = null;
         }
 
@@ -515,6 +534,24 @@ namespace TMKOC.BridgeQuest
              .SetUpdate(true);
         }
 
+        /// <summary>
+        /// Snaps the tapped option's fill to <see cref="correctFlashColor"/> -- the
+        /// same shake-and-flash language as a wrong tap, just green. No fade-back
+        /// tween needed: Hide() (called shortly after, once correctHold elapses)
+        /// already restores every slot's fill to its authored colour via
+        /// ResetFillFlashes(), and the card is gone by the time the next question
+        /// paints these slots again anyway.
+        /// </summary>
+        private void FlashCorrect(int slot)
+        {
+            if (optionFlashGraphics == null || slot < 0 || slot >= optionFlashGraphics.Length) return;
+
+            Image g = optionFlashGraphics[slot];
+            if (g == null) return;
+
+            g.DOKill();
+            g.color = correctFlashColor;
+        }
 
         private void LockAll()
         {

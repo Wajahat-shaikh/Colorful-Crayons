@@ -1,0 +1,296 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 501418a5dbfa143da8f4c469dbd42a68, type: 3}
+  m_Name: Mission_3_Abdul_Colour
+  m_EditorClassIdentifier: 
+  missionNumber: 3
+  characterName: Abdul
+  destinationName: Gokuldham Society
+  characterPortrait: {fileID: 0}
+  backgroundArt: {fileID: 0}
+  plankSprite: {fileID: 0}
+  plankSprites:
+  - {fileID: 21300000, guid: 3d6385bf6a5ca4a08843632015f9af68, type: 3}
+  - {fileID: 21300000, guid: f99e31eff763947328364b5f9ab8b1ea, type: 3}
+  - {fileID: 21300000, guid: eb96ead9e43cb4e7bb2f85724159d7b3, type: 3}
+  - {fileID: 21300000, guid: 1a64cd4f12d7b4104ab9c598f91fdca3, type: 3}
+  - {fileID: 21300000, guid: 3edba1848b9044d628a0e1f0b6f26a92, type: 3}
+  openingPanels:
+  - art: {fileID: 0}
+    caption: Abdul has groceries to deliver to Gokuldham Society.
+    voiceKey: m3_story_open_1
+    restPosition: {x: -430, y: 170}
+    restRotation: -4
+    restScale: 1
+    fromOffset: {x: 0, y: 900}
+    fromRotation: -18
+    hold: 2.5
+  - art: {fileID: 0}
+    caption: But the path across the canal is broken!
+    voiceKey: m3_story_open_2
+    restPosition: {x: 150, y: 235}
+    restRotation: 5
+    restScale: 1
+    fromOffset: {x: 0, y: 900}
+    fromRotation: -18
+    hold: 2.5
+  - art: {fileID: 0}
+    caption: Help Abdul build a bridge for his delivery!
+    voiceKey: m3_story_open_3
+    restPosition: {x: -190, y: -190}
+    restRotation: 3
+    restScale: 1
+    fromOffset: {x: 0, y: 900}
+    fromRotation: -18
+    hold: 2.5
+  endingPanels:
+  - art: {fileID: 0}
+    caption: The bridge is finished!
+    voiceKey: m3_story_end_1
+    restPosition: {x: -430, y: 170}
+    restRotation: -4
+    restScale: 1
+    fromOffset: {x: 0, y: 900}
+    fromRotation: -18
+    hold: 2.5
+  - art: {fileID: 0}
+    caption: Abdul carries the groceries across.
+    voiceKey: m3_story_end_2
+    restPosition: {x: 150, y: 235}
+    restRotation: 5
+    restScale: 1
+    fromOffset: {x: 0, y: 900}
+    fromRotation: -18
+    hold: 2.5
+  - art: {fileID: 0}
+    caption: The groceries reach Gokuldham Society!
+    voiceKey: m3_story_end_3
+    restPosition: {x: -190, y: -190}
+    restRotation: 3
+    restScale: 1
+    fromOffset: {x: 0, y: 900}
+    fromRotation: -18
+    hold: 2.5
+  questions:
+  - type: 4
+    prompt: Tap the color Red
+    promptVoiceKey: question_colour_red
+    promptArt: {fileID: 0}
+    options:
+    - art: {fileID: 0}
+      label: Red
+      useColour: 1
+      colour: {r: 1, g: 0, b: 0, a: 1}
+      voiceKey: colour_red
+    - art: {fileID: 0}
+      label: Yellow
+      useColour: 1
+      colour: {r: 1, g: 1, b: 0, a: 1}
+      voiceKey: colour_yellow
+    - art: {fileID: 0}
+      label: Green
+      useColour: 1
+      colour: {r: 0, g: 1, b: 0, a: 1}
+      voiceKey: colour_green
+    correctIndex: 0
+  - type: 4
+    prompt: Find the color Yellow
+    promptVoiceKey: question_colour_yellow
+    promptArt: {fileID: 0}
+    options:
+    - art: {fileID: 0}
+      label: Blue
+      useColour: 1
+      colour: {r: 0, g: 0.21960784, b: 1, a: 1}
+      voiceKey: colour_blue
+    - art: {fileID: 0}
+      label: Yellow
+      useColour: 1
+      colour: {r: 1, g: 1, b: 0, a: 1}
+      voiceKey: colour_yellow
+    - art: {fileID: 0}
+      label: Orange
+      useColour: 1
+      colour: {r: 1, g: 0.64705884, b: 0, a: 1}
+      voiceKey: colour_orange
+    correctIndex: 1
+  - type: 4
+    prompt: Can you tap Green?
+    promptVoiceKey: question_colour_green
+    promptArt: {fileID: 0}
+    options:
+    - art: {fileID: 0}
+      label: Red
+      useColour: 1
+      colour: {r: 1, g: 0, b: 0, a: 1}
+      voiceKey: colour_red
+    - art: {fileID: 0}
+      label: Yellow
+      useColour: 1
+      colour: {r: 1, g: 1, b: 0, a: 1}
+      voiceKey: colour_yellow
+    - art: {fileID: 0}
+      label: Green
+      useColour: 1
+      colour: {r: 0, g: 1, b: 0, a: 1}
+      voiceKey: colour_green
+    correctIndex: 2
+  - type: 4
+    prompt: Where is the color Blue?
+    promptVoiceKey: question_colour_blue
+    promptArt: {fileID: 0}
+    options:
+    - art: {fileID: 0}
+      label: Blue
+      useColour: 1
+      colour: {r: 0, g: 0.21960784, b: 1, a: 1}
+      voiceKey: colour_blue
+    - art: {fileID: 0}
+      label: Green
+      useColour: 1
+      colour: {r: 0, g: 1, b: 0, a: 1}
+      voiceKey: colour_green
+    - art: {fileID: 0}
+      label: Orange
+      useColour: 1
+      colour: {r: 1, g: 0.64705884, b: 0, a: 1}
+      voiceKey: colour_orange
+    correctIndex: 0
+  - type: 4
+    prompt: Choose the color Orange
+    promptVoiceKey: question_colour_orange
+    promptArt: {fileID: 0}
+    options:
+    - art: {fileID: 0}
+      label: Red
+      useColour: 1
+      colour: {r: 1, g: 0, b: 0, a: 1}
+      voiceKey: colour_red
+    - art: {fileID: 0}
+      label: Orange
+      useColour: 1
+      colour: {r: 1, g: 0.64705884, b: 0, a: 1}
+      voiceKey: colour_orange
+    - art: {fileID: 0}
+      label: Blue
+      useColour: 1
+      colour: {r: 0, g: 0.21960784, b: 1, a: 1}
+      voiceKey: colour_blue
+    correctIndex: 1
+  - type: 4
+    prompt: Tap the color Red
+    promptVoiceKey: question_colour_red_2
+    promptArt: {fileID: 0}
+    options:
+    - art: {fileID: 0}
+      label: Yellow
+      useColour: 1
+      colour: {r: 1, g: 1, b: 0, a: 1}
+      voiceKey: colour_yellow
+    - art: {fileID: 0}
+      label: Green
+      useColour: 1
+      colour: {r: 0, g: 1, b: 0, a: 1}
+      voiceKey: colour_green
+    - art: {fileID: 0}
+      label: Red
+      useColour: 1
+      colour: {r: 1, g: 0, b: 0, a: 1}
+      voiceKey: colour_red
+    correctIndex: 2
+  - type: 4
+    prompt: Find the color Yellow
+    promptVoiceKey: question_colour_yellow_2
+    promptArt: {fileID: 0}
+    options:
+    - art: {fileID: 0}
+      label: Yellow
+      useColour: 1
+      colour: {r: 1, g: 1, b: 0, a: 1}
+      voiceKey: colour_yellow
+    - art: {fileID: 0}
+      label: Orange
+      useColour: 1
+      colour: {r: 1, g: 0.64705884, b: 0, a: 1}
+      voiceKey: colour_orange
+    - art: {fileID: 0}
+      label: Blue
+      useColour: 1
+      colour: {r: 0, g: 0.21960784, b: 1, a: 1}
+      voiceKey: colour_blue
+    correctIndex: 0
+  - type: 4
+    prompt: Can you tap Green?
+    promptVoiceKey: question_colour_green_2
+    promptArt: {fileID: 0}
+    options:
+    - art: {fileID: 0}
+      label: Red
+      useColour: 1
+      colour: {r: 1, g: 0, b: 0, a: 1}
+      voiceKey: colour_red
+    - art: {fileID: 0}
+      label: Green
+      useColour: 1
+      colour: {r: 0, g: 1, b: 0, a: 1}
+      voiceKey: colour_green
+    - art: {fileID: 0}
+      label: Orange
+      useColour: 1
+      colour: {r: 1, g: 0.64705884, b: 0, a: 1}
+      voiceKey: colour_orange
+    correctIndex: 1
+  - type: 4
+    prompt: Where is the color Blue?
+    promptVoiceKey: question_colour_blue_2
+    promptArt: {fileID: 0}
+    options:
+    - art: {fileID: 0}
+      label: Yellow
+      useColour: 1
+      colour: {r: 1, g: 1, b: 0, a: 1}
+      voiceKey: colour_yellow
+    - art: {fileID: 0}
+      label: Red
+      useColour: 1
+      colour: {r: 1, g: 0, b: 0, a: 1}
+      voiceKey: colour_red
+    - art: {fileID: 0}
+      label: Blue
+      useColour: 1
+      colour: {r: 0, g: 0.21960784, b: 1, a: 1}
+      voiceKey: colour_blue
+    correctIndex: 2
+  - type: 4
+    prompt: Choose the color Orange
+    promptVoiceKey: question_colour_orange_2
+    promptArt: {fileID: 0}
+    options:
+    - art: {fileID: 0}
+      label: Orange
+      useColour: 1
+      colour: {r: 1, g: 0.64705884, b: 0, a: 1}
+      voiceKey: colour_orange
+    - art: {fileID: 0}
+      label: Green
+      useColour: 1
+      colour: {r: 0, g: 1, b: 0, a: 1}
+      voiceKey: colour_green
+    - art: {fileID: 0}
+      label: Blue
+      useColour: 1
+      colour: {r: 0, g: 0.21960784, b: 1, a: 1}
+      voiceKey: colour_blue
+    correctIndex: 0
+  questionsPerRun: 5
+  missionIntroVoiceKey: m3_mission_intro
+  missionCompleteVoiceKey: m3_mission_complete

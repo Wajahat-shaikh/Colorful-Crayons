@@ -5,11 +5,20 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 1
+  - enabled: 0
     path: Assets/_Game/FruitAndVeggiRun/RocketRun.unity
     guid: e37fab948c31a4c919c3f33ced29634b
-  - enabled: 1
-    path: Assets/_Game/BridgeQuest/BridgeQuest.unity
+  - enabled: 0
+    path: Assets/_Game/BridgeQuest/BridgeQuest_Tappu.unity
     guid: 1568335b0ab944704b929c03b0393869
+  - enabled: 0
+    path: Assets/_Game/BridgeQuest/BridgeQuest_Goli.unity
+    guid: a5e4ef1efccf40b290b1a1822d817237
+  - enabled: 0
+    path: Assets/_Game/BridgeQuest/BridgeQuest_Abdul.unity
+    guid: 683eaeea03e149e195053016bf5d3a97
+  - enabled: 1
+    path: Assets/Scenes/PlayschoolMainScene.unity
+    guid: 4816754db985f4928880e901e3a522a3
   m_configObjects: {}
   m_UseUCBPForAssetBundles: 0

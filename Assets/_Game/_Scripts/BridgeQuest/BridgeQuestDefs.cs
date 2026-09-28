@@ -96,6 +96,9 @@ namespace TMKOC.BridgeQuest
         [Tooltip("voiceover_title from the VO sheet, e.g. m1_story_open_1. Blank leaves the panel silent.")]
         public string voiceKey;
 
+        [Tooltip("Optional second line spoken on this same panel, right after voiceKey finishes -- for when one card carries two beats of narration instead of flying in a whole new card for the second line. Blank plays only voiceKey.")]
+        public string voiceKey2;
+
         [Header("Resting pose (anchored position / rotation / scale)")]
         public Vector2 restPosition;
         public float restRotation = -3f;

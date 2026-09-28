@@ -1,4 +1,6 @@
+using System.Collections;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
 
 namespace TMKOC.BridgeQuest
@@ -22,7 +24,7 @@ namespace TMKOC.BridgeQuest
     /// <see cref="PlayWalk"/> as the crossing starts and <see cref="PlayIdle"/> when
     /// the character arrives.
     /// </summary>
-    public class BridgeQuestPlayerView : MonoBehaviour
+    public class BridgeQuestPlayerView : MonoBehaviour, ICrossingView
     {
         [Header("Refs")]
         [Tooltip("Animator on the Tappu rig root.")]
@@ -42,12 +44,32 @@ namespace TMKOC.BridgeQuest
         [Tooltip("Seconds to blend between idle and walk. 0 cuts straight to the state.")]
         [SerializeField] private float blendDuration = 0.15f;
 
+        [Tooltip("For a rig with no separate idle clip (idleState == walkState, e.g. Bhide's single rowing loop): pauses the animator on PlayIdle instead of leaving the same motion looping while standing still. Leave off when idleState is its own distinct animation.")]
+        [SerializeField] private bool freezeOnIdle = false;
+
+        [Tooltip("Animator.speed while walking. A single crossing hop can be shorter than one full cycle of a long clip (e.g. Bhide's ~1.3s rowing loop against a ~0.5s hop), so an Animation Event timed for a specific frame (the paddle hitting water) may never be reached at normal speed before PlayIdle freezes it again. Raise this so the clip -- and its event -- reliably plays out within a hop. 1 = no change.")]
+        [SerializeField] private float walkAnimatorSpeed = 1f;
+
+        [Tooltip("For a clip authored as two alternating hops back to back in one loop (e.g. Goli's GoliSideHop -- left-foot lead, then right-foot lead), alternates PlayWalk() between starting the clip at normalized time 0 and 0.5 instead of always restarting at 0 -- so consecutive hops read as alternating strides rather than repeating the same half every time. Only meaningful alongside freezeOnIdle.")]
+        [SerializeField] private bool alternateWalkHalves = false;
+
+        private bool walkSecondHalf;
+
         [Header("Celebration")]
         [Tooltip("Optional front-facing rig (Tappu_Front). Swapped in for the walking rig once the crossing is done and filmed by the SAME camera onto the SAME texture -- the scene does not gain a second camera or a second RawImage. Left empty, the crossing just ends on the idle pose.")]
         [SerializeField] private Animator celebrationAnimator;
 
         [Tooltip("Tappu_Front's controller has no parameters and no transitions either, so the state is played by name.")]
         [SerializeField] private string celebrationState = "TappuFrontCelebration";
+
+        [Header("Reaction")]
+        [Tooltip("Optional -- an Animator state played once, uninterrupted, in response to something external rather than the idle/walk cycle (e.g. a stumble on a wrong answer). Left empty, PlayReaction() does nothing.")]
+        [SerializeField] private string reactionState = "";
+
+        [Tooltip("Seconds the reaction plays before returning to idle -- tune to the clip's actual length.")]
+        [SerializeField] private float reactionDuration = 0.8f;
+
+        private Coroutine reactionRoutine;
 
         [Header("Framing")]
         [Tooltip("Headroom around the rig, as a multiplier on its height. 1 = tight crop.")]
@@ -58,6 +80,10 @@ namespace TMKOC.BridgeQuest
 
         [Tooltip("Animate on unscaled time. The crossing and every card in this game run with the world frozen, and a scaled Animator freezes with it.")]
         [SerializeField] private bool animateUnscaled = true;
+
+        [Header("Events")]
+        [Tooltip("Fires every time PlayWalk() runs -- i.e. the instant a crossing hop starts, before any animation has played. Wire scene-specific effects here (e.g. a bow wave that should start with the movement) instead of tying them to a mid-animation event.")]
+        public UnityEvent onWalkStarted;
 
         private RenderTexture owned;   // only textures created here are destroyed here
         private bool warned;        private bool celebrating;
@@ -113,13 +139,72 @@ namespace TMKOC.BridgeQuest
         // ---- animation -------------------------------------------------------
 
         /// <summary>Standing still.</summary>
-        public void PlayIdle() { Play(idleState); }
+        public void PlayIdle()
+        {
+            Play(idleState);
+            if (freezeOnIdle && animator != null) animator.speed = 0f;
+        }
 
         /// <summary>Crossing the bridge.</summary>
-        public void PlayWalk() { Play(walkState); }
+        public void PlayWalk()
+        {
+            onWalkStarted?.Invoke();
+
+            if (freezeOnIdle && animator != null)
+            {
+                animator.speed = walkAnimatorSpeed;
+
+                // freezeOnIdle rigs share one state for idle and walk, so crossfading
+                // into the state it is already paused on would just resume from
+                // wherever it stopped -- restarting at a fixed point makes every hop's
+                // animation (and any event timed within it) land at the same point
+                // in the stroke, regardless of how long the previous hop was.
+                float startTime = 0f;
+                if (alternateWalkHalves)
+                {
+                    startTime = walkSecondHalf ? 0.5f : 0f;
+                    walkSecondHalf = !walkSecondHalf;
+                }
+
+                if (animator.HasState(0, Animator.StringToHash(walkState))) animator.Play(walkState, 0, startTime);
+                return;
+            }
+
+            Play(walkState);
+        }
 
         /// <summary>True when a celebration rig is wired and there is something to play.</summary>
         public bool HasCelebration { get { return celebrationAnimator != null; } }
+
+        /// <summary>
+        /// Plays <see cref="reactionState"/> once on the walking rig's own Animator --
+        /// a stumble, a flinch, anything reacting to something external -- then
+        /// returns to idle. Cuts short and restarts cleanly if called again mid-play.
+        /// Does nothing if no reaction state is wired.
+        /// </summary>
+        public void PlayReaction()
+        {
+            if (string.IsNullOrEmpty(reactionState) || animator == null) return;
+            if (reactionRoutine != null) StopCoroutine(reactionRoutine);
+            reactionRoutine = StartCoroutine(ReactionRoutine());
+        }
+
+        private IEnumerator ReactionRoutine()
+        {
+            if (animator.HasState(0, Animator.StringToHash(reactionState)))
+            {
+                float savedSpeed = animator.speed;
+                animator.speed = 1f; // the reaction plays at its own pace, regardless of any walk-speed tuning
+                animator.Play(reactionState, 0, 0f);
+
+                yield return new WaitForSecondsRealtime(reactionDuration);
+
+                animator.speed = savedSpeed;
+            }
+
+            PlayIdle();
+            reactionRoutine = null;
+        }
 
         /// <summary>
         /// Arrived, and pleased about it. The walking rig steps aside and the

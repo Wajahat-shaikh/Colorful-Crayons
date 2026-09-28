@@ -2,7 +2,7 @@
     "items": [
         {
             "k": "ServerRoot",
-            "v": "/Volumes/Gaming/AssetBundlesStorage"
+            "v": "\\\\10.1.1.3\\Gaming\\AssetBundlesStorage"
         },
         {
             "k": "GameName",
@@ -10,7 +10,7 @@
         },
         {
             "k": "AssetBundleFolder",
-            "v": "/Users/satyam/Documents/GitHub/Colorful-Crayons/AssetBundles"
+            "v": "D:/UnityProjects/Colorful-Crayons/AssetBundles"
         },
         {
             "k": "ScriptList",

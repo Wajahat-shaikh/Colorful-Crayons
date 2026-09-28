@@ -36,8 +36,14 @@ namespace TMKOC.BridgeQuest
         [Tooltip("Pointing-finger art for the 'tap the answer' step.")]
         [SerializeField] private Sprite handIcon;
 
-        [Tooltip("Plank art for the 'each answer builds the bridge' step.")]
+        [Tooltip("Art for the third step -- 'each right answer moves you forward'. A plank for Tappu's bridge by default; swap per scene to match the mechanic (a boat/paddle for Bhide's rowing, etc).")]
         [SerializeField] private Sprite plankIcon;
+
+        [Tooltip("Third step's message. Defaults to the bridge-building copy -- only Tappu actually builds a bridge, so every other scene should override this to describe its own mechanic (rowing a boat, etc) instead of sharing this line.")]
+        [SerializeField] private string thirdStepMessage = "Every right answer builds the bridge.";
+
+        [Tooltip("Third step's voice key. Empty (default) falls back to the shared AudioMapper.TutorialBridge line -- override this whenever thirdStepMessage is overridden, so the scene's own recorded line (matching its own audio category) actually plays instead of the generic bridge-building one.")]
+        [SerializeField] private string thirdStepVoiceKey = "";
 
         [Header("Stuck-nudge")]
         [Tooltip("Animated hand, reparented over the correct option when the child stalls.")]
@@ -49,8 +55,14 @@ namespace TMKOC.BridgeQuest
         [Tooltip("Seconds before the hand appears again, if they still have not answered.")]
         [SerializeField] private float hintRepeatDelay = 6f;
 
-        [SerializeField] private float hintBobHeight = 18f;
-        [SerializeField] private float hintBobDuration = 0.6f;
+        [Tooltip("How much the hand shrinks on each press, as a fraction of its scale -- e.g. 0.25 punches down to 75% size and springs back, reading as a fingertip tapping rather than a hand bobbing up and down.")]
+        [SerializeField] private float hintTapScale = 0.25f;
+
+        [Tooltip("Seconds for one press-and-release cycle.")]
+        [SerializeField] private float hintTapDuration = 0.35f;
+
+        [Tooltip("How many taps play per appearance, before the hand waits out hintRepeatDelay and tries again.")]
+        [SerializeField] private int hintTapCount = 6;
 
         [Header("Tuning")]
         [SerializeField] private float popInDuration = 0.3f;
@@ -74,8 +86,7 @@ namespace TMKOC.BridgeQuest
 
         /// <summary>
         /// Runs the three-step opening lesson, then calls back. Waits out the opening
-        /// storyboard first -- <see cref="BridgeStoryCutsceneUI.IsPlaying"/> is the
-        /// handshake, exactly as RocketRunTutorial waits on StoryCutsceneUI.
+        /// storyboard first.
         /// </summary>
         public void RunOpeningLesson(Action onComplete)
         {
@@ -87,7 +98,20 @@ namespace TMKOC.BridgeQuest
             // let every other Start() run before we touch anything
             yield return null;
 
-            while (BridgeStoryCutsceneUI.IsPlaying) yield return null;
+            // The storyboard shares this scene's one AudioSource. RunMission already
+            // waits for the storyboard's own onStoryboardComplete before calling here,
+            // but that handshake fires the instant the last panel's wait loop exits --
+            // a tap-skip on that very last line can leave the tail end of it (or a
+            // late-decoding clip) still audible for a beat after. Wait that out too, so
+            // this lesson's own first line never Stop()s a story line still speaking.
+            float waited = 0f;
+            while (waited < 5f)
+            {
+                RuntimeAudioLoader loader = RuntimeAudioLoader.Instance;
+                if (loader == null || loader._commonAudioSource == null || !loader._commonAudioSource.isPlaying) break;
+                waited += Time.unscaledDeltaTime;
+                yield return null;
+            }
 
             BridgeQuestAudioMapper voice = BridgeQuestVoice.Mapper;
 
@@ -107,9 +131,9 @@ namespace TMKOC.BridgeQuest
 
             yield return ShowInstruction(new Step
             {
-                message = "Every right answer builds the bridge.",
+                message = thirdStepMessage,
                 icon = plankIcon,
-                voiceKey = voice != null ? voice.TutorialBridge : null
+                voiceKey = !string.IsNullOrEmpty(thirdStepVoiceKey) ? thirdStepVoiceKey : (voice != null ? voice.TutorialBridge : null)
             });
 
             if (root != null) root.SetActive(false);
@@ -184,6 +208,7 @@ namespace TMKOC.BridgeQuest
             if (hintHand != null)
             {
                 hintHand.DOKill();
+                hintHand.localScale = Vector3.one;
                 hintHand.gameObject.SetActive(false);
             }
         }
@@ -202,16 +227,21 @@ namespace TMKOC.BridgeQuest
                 hintHand.SetAsLastSibling();
                 hintHand.gameObject.SetActive(true);
 
+                // a stuck child has likely stopped listening by now -- say the
+                // question again alongside the tap hint, not just point at it
+                card.RepeatPromptSilently();
+
                 hintHand.DOKill();
+                hintHand.localScale = Vector3.one;
                 hintHand
-                    .DOAnchorPosY(hintBobHeight, hintBobDuration)
-                    .SetEase(Ease.InOutSine)
-                    .SetLoops(6, LoopType.Yoyo)
+                    .DOPunchScale(Vector3.one * -hintTapScale, hintTapDuration, 1, 0f)
+                    .SetLoops(hintTapCount, LoopType.Restart)
                     .SetUpdate(true);
 
-                yield return new WaitForSecondsRealtime(hintBobDuration * 6f);
+                yield return new WaitForSecondsRealtime(hintTapDuration * hintTapCount);
 
                 hintHand.DOKill();
+                hintHand.localScale = Vector3.one;
                 hintHand.gameObject.SetActive(false);
 
                 yield return new WaitForSecondsRealtime(hintRepeatDelay);

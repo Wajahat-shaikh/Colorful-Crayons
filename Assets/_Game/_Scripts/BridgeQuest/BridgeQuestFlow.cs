@@ -4,6 +4,7 @@ using System.Collections;using DG.Tweening;
 using TMPro;
 using TMKOC.Sorting;
 using UnityEngine;using UnityEngine.UI;
+using UnityEngine.Events;
 
 
 namespace TMKOC.BridgeQuest
@@ -34,7 +35,10 @@ namespace TMKOC.BridgeQuest
         [SerializeField] private MissionData mission;
 
         [Header("Refs")]
-        [SerializeField] private BridgeStoryCutsceneUI storyboard;
+        [Tooltip("Anything implementing IStoryboardPlayer -- BridgeStoryCutsceneUI's scrapbook collage by default, or a StorySlideshowStoryboard adapter for a scene that wants slides shown one at a time instead. Assign the component here; the interface cast happens at runtime via the Storyboard property.")]
+        [SerializeField] private MonoBehaviour storyboard;
+
+        private IStoryboardPlayer Storyboard { get { return storyboard as IStoryboardPlayer; } }
         [SerializeField] private QuestionCardUI questionCard;
         [SerializeField] private BridgeBuilderUI bridge;
         [SerializeField] private PlankCompletePopup plankPopup;
@@ -96,6 +100,10 @@ namespace TMKOC.BridgeQuest
         [Header("Tutorial")]
         [Tooltip("Runs the opening lesson only on the first mission. Later missions go straight from storyboard to questions.")]
         [SerializeField] private bool tutorialOnFirstMissionOnly = true;
+
+        [Header("Events")]
+        [Tooltip("Fires at the end of RestartMission() -- both the lose-screen retry and the win-screen replay go through it. Wire scene-specific cleanup here (e.g. resetting a storyboard that hid itself on completion) instead of teaching this shared class about any one scene's extras.")]
+        public UnityEvent onMissionRestarted;
 
         private int questionIndex;
 
@@ -265,8 +273,12 @@ namespace TMKOC.BridgeQuest
             }
 
             // the storyboard has finished narrating and the lesson has stopped
-            // speaking -- first moment in the whole opening where a line is safe
-            BridgeQuestVoice.Play(mission.missionIntroVoiceKey);
+            // speaking -- first moment in the whole opening where a line is safe.
+            // Everything shares one AudioSource (see FinishRoutine), so the first
+            // question's own prompt -- fired moments later by AskNext -- would Stop()
+            // this line mid-word if nothing waited for it first.
+            float introLine = BridgeQuestVoice.PlayAndGetLength(mission.missionIntroVoiceKey);
+            if (introLine > 0f) yield return new WaitForSecondsRealtime(introLine);
 
             // the banner has done its job by now -- three seconds of play and it goes,
             // so the bridge and the question card have the screen to themselves
@@ -278,10 +290,11 @@ namespace TMKOC.BridgeQuest
 
         private IEnumerator PlayStoryboard(StoryPanel[] panels)
         {
-            if (storyboard == null || panels == null || panels.Length == 0) yield break;
+            IStoryboardPlayer player = Storyboard;
+            if (player == null || panels == null || panels.Length == 0) yield break;
 
             bool done = false;
-            storyboard.Play(panels, delegate { done = true; });
+            player.Play(panels, delegate { done = true; });
             while (!done) yield return null;
         }
 
@@ -490,6 +503,8 @@ namespace TMKOC.BridgeQuest
             StopAllCoroutines();
             ShowBannerThenAutoHide();
             AskNext();
+
+            onMissionRestarted?.Invoke();
         }
 
         private void SetBanner(string text)

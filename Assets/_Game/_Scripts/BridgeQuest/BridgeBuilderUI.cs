@@ -37,8 +37,14 @@ namespace TMKOC.BridgeQuest
         [SerializeField] private RectTransform walkEnd;
 
         [Tooltip("Optional -- the character rig displayed in the walker. Idle while the bridge is\n" +
-                 "being built, walk for the crossing. Left empty, the walker just slides.")]
-        [SerializeField] private BridgeQuestPlayerView playerView;
+                 "being built, walk for the crossing. Left empty, the walker just slides.\n\n" +
+                 "Serialized as a MonoBehaviour rather than a concrete type so any component\n" +
+                 "implementing ICrossingView can be dropped in here -- the Animator-driven\n" +
+                 "BridgeQuestPlayerView by default, or a rig-less view built from plain UI parts\n" +
+                 "(ScooterCrossingView) for a character with no rig at all.")]
+        [SerializeField] private MonoBehaviour playerView;
+
+        private ICrossingView PlayerView { get { return playerView as ICrossingView; } }
 
         [Header("Grouping")]
         [Tooltip("How many planks each correct answer drops, in question order.\n" +
@@ -79,6 +85,25 @@ namespace TMKOC.BridgeQuest
         [Tooltip("Nudges where the character stands relative to the plank's centre. X shifts along the span, Y off the walk line.")]
         [SerializeField] private Vector2 walkerPlankOffset = Vector2.zero;
 
+        [Header("Hop")]
+        [Tooltip("Arc height a single step rises through, in local canvas units. 0 keeps the old\n" +
+                 "straight slide between planks -- only turn this on for a scene where the walker\n" +
+                 "genuinely jumps from one foothold to the next (stone hopping) rather than walks\n" +
+                 "or rows across a continuous span.")]
+        [SerializeField] private float hopHeight = 0f;
+
+        [Tooltip("Normalized progress (0-1) into the step at which the character actually leaves the\n" +
+                 "ground. Before this the walker neither rises nor moves horizontally -- matches a rig\n" +
+                 "with its own windup before liftoff (a crouch, a wind-back). 0 keeps the old behaviour\n" +
+                 "of rising and travelling from the very start of the step.")]
+        [SerializeField] [Range(0f, 1f)] private float hopLiftoffFraction = 0f;
+
+        [Tooltip("Normalized progress (0-1) into the step at which the character's foot is back on the\n" +
+                 "ground. After this the walker sits at its arrival position, neither rising nor moving --\n" +
+                 "matches a rig with its own landing settle after impact. 1 keeps the old behaviour of\n" +
+                 "landing exactly at the end of the step.")]
+        [SerializeField] [Range(0f, 1f)] private float hopLandFraction = 1f;
+
         [Tooltip("On, the walker's height while stepping across the deck comes from each plank's own\n" +
                  "anchored Y (plus walkerPlankOffset.y) instead of being interpolated between WalkStart\n" +
                  "and WalkEnd. Turn this on for a flat, fanned deck where every plank sits at the same\n" +
@@ -86,6 +111,13 @@ namespace TMKOC.BridgeQuest
                  "the planks nearest each bank. Off (default) keeps the old bank-to-bank lerp, which is\n" +
                  "still correct for a deck that genuinely rises or falls from one bank to the other.")]
         [SerializeField] private bool useSlotHeightForWalk = false;
+
+        [Header("Travel scale")]
+        [Tooltip("How much the walker scales up and back down over the course of one travel move (a step onto the next plank, or the final crossing) -- e.g. 0.03 for a boat that swells very slightly as it glides, read as a touch of life/perspective rather than a rigid slide. Peaks halfway through the move and is back to normal exactly on arrival. 0 disables.")]
+        [SerializeField] private float travelScalePulse = 0f;
+
+        private Vector3 walkerRestScale = Vector3.one;
+        private bool walkerRestScaleCaptured;
 
         private int placed;
         private int placedGroups;
@@ -172,14 +204,15 @@ namespace TMKOC.BridgeQuest
             {
                 walker.DOKill();
                 walker.anchoredPosition = walkStart.anchoredPosition;
+                if (walkerRestScaleCaptured) walker.localScale = walkerRestScale;
             }
 
             // standing at the near bank while the questions are answered -- and facing
             // sideways again, in case the last run ended mid-celebration
-            if (playerView != null)
+            if (PlayerView != null)
             {
-                playerView.StopCelebration();
-                playerView.PlayIdle();
+                PlayerView.StopCelebration();
+                PlayerView.PlayIdle();
             }
         }
 
@@ -342,18 +375,87 @@ namespace TMKOC.BridgeQuest
             duration = Mathf.Max(0.05f, duration);
 
             walker.DOKill();
-            if (playerView != null) playerView.PlayWalk();
+            if (PlayerView != null) PlayerView.PlayWalk();
 
-            walker
-                .DOAnchorPos(target, duration)
-                .SetEase(Ease.Linear)
-                .SetUpdate(true)
-                .OnComplete(delegate
-                {
-                    walker.anchoredPosition = target;
-                    if (playerView != null) playerView.PlayIdle();
-                    if (onArrived != null) onArrived();
-                });
+            TweenWalkerTo(target, duration, delegate
+            {
+                if (PlayerView != null) PlayerView.PlayIdle();
+                if (onArrived != null) onArrived();
+            });
+        }
+
+        /// <summary>
+        /// Moves the walker to <paramref name="target"/> over <paramref name="duration"/>.
+        /// A plain linear slide when <see cref="hopHeight"/> is 0 (every existing scene);
+        /// otherwise the same straight-line path with a sine arc added on top, so the
+        /// walker visibly leaves the ground and lands again instead of gliding across --
+        /// e.g. Goli hopping from stone to stone. Either way <paramref name="onArrived"/>
+        /// fires once, with the walker snapped exactly onto target.
+        /// </summary>
+        private void TweenWalkerTo(Vector2 target, float duration, Action onArrived)
+        {
+            PulseWalkerScale(duration);
+
+            if (hopHeight <= 0f)
+            {
+                walker.DOAnchorPos(target, duration)
+                    .SetEase(Ease.Linear)
+                    .SetUpdate(true)
+                    .OnComplete(delegate
+                    {
+                        walker.anchoredPosition = target;
+                        if (onArrived != null) onArrived();
+                    });
+                return;
+            }
+
+            Vector2 start = walker.anchoredPosition;
+
+            DOVirtual.Float(0f, 1f, duration, delegate(float t)
+            {
+                // outside [hopLiftoffFraction, hopLandFraction] the walker sits still --
+                // a windup before liftoff, a settle after landing -- and only travels
+                // and arcs during the airborne window in between
+                float u = hopLandFraction > hopLiftoffFraction
+                    ? Mathf.Clamp01((t - hopLiftoffFraction) / (hopLandFraction - hopLiftoffFraction))
+                    : t;
+
+                Vector2 pos = Vector2.Lerp(start, target, u);
+                pos.y += hopHeight * Mathf.Sin(u * Mathf.PI);
+                walker.anchoredPosition = pos;
+            })
+            .SetEase(Ease.Linear)
+            .SetUpdate(true)
+            .SetTarget(walker)
+            .OnComplete(delegate
+            {
+                walker.anchoredPosition = target;
+                if (onArrived != null) onArrived();
+            });
+        }
+
+        /// <summary>
+        /// Grows the walker very slightly and back down over one travel move -- a
+        /// separate tween on localScale, running alongside whatever is driving
+        /// anchoredPosition, so it never fights the slide/hop. Peaks at the
+        /// midpoint and lands back on the walker's own authored scale exactly when
+        /// the move ends, whatever that scale is (captured once, lazily, so this
+        /// works whether or not the walker was authored at localScale == 1).
+        /// </summary>
+        private void PulseWalkerScale(float duration)
+        {
+            if (walker == null || travelScalePulse <= 0f) return;
+
+            if (!walkerRestScaleCaptured)
+            {
+                walkerRestScale = walker.localScale;
+                walkerRestScaleCaptured = true;
+            }
+
+            walker.DOScale(walkerRestScale * (1f + travelScalePulse), duration * 0.5f)
+                .SetEase(Ease.InOutSine)
+                .SetLoops(2, LoopType.Yoyo)
+                .SetUpdate(true);
         }
 
         /// <summary>
@@ -440,7 +542,7 @@ namespace TMKOC.BridgeQuest
             // already on the far bank -- nothing left to walk
             if (Vector2.Distance(walker.anchoredPosition, target) < 1f)
             {
-                if (playerView != null) playerView.PlayIdle();
+                if (PlayerView != null) PlayerView.PlayIdle();
                 if (onArrived != null) onArrived();
                 return;
             }
@@ -463,25 +565,19 @@ namespace TMKOC.BridgeQuest
             }
 
             // feet move for exactly as long as the slot slides
-            if (playerView != null) playerView.PlayWalk();
+            if (PlayerView != null) PlayerView.PlayWalk();
 
-            walker
-                .DOAnchorPos(target, duration)
-                .SetEase(Ease.Linear)
-                .SetUpdate(true)
-                .OnComplete(delegate
-                {
-                    walker.anchoredPosition = target;
+            TweenWalkerTo(target, duration, delegate
+            {
+                // arrived -- stand still again before the closing storyboard
+                if (PlayerView != null) PlayerView.PlayIdle();
 
-                    // arrived -- stand still again before the closing storyboard
-                    if (playerView != null) playerView.PlayIdle();
-
-                    if (onArrived != null) onArrived();
-                });
+                if (onArrived != null) onArrived();
+            });
         }
 
         /// <summary>True when the view has a celebration rig to swap in.</summary>
-        public bool HasCelebration { get { return playerView != null && playerView.HasCelebration; } }
+        public bool HasCelebration { get { return PlayerView != null && PlayerView.HasCelebration; } }
 
         /// <summary>
         /// The little dance at the far bank. Loops until something else moves the
@@ -490,7 +586,7 @@ namespace TMKOC.BridgeQuest
         /// </summary>
         public void PlayCelebration()
         {
-            if (playerView != null) playerView.PlayCelebration();
+            if (PlayerView != null) PlayerView.PlayCelebration();
         }
 
 

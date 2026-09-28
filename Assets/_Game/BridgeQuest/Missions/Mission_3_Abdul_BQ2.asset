@@ -26,8 +26,8 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 3edba1848b9044d628a0e1f0b6f26a92, type: 3}
   openingPanels:
   - art: {fileID: 21300000, guid: 27f34cf1a20604a65bc3505bdeb2fbb8, type: 3}
-    caption: Abdul has groceries to deliver to Gokuldham Society.
-    voiceKey: m3_story_open_1
+    caption: Abdul has groceries to deliver to Gokuldham Society today!
+    voiceKey: abdul_story_1
     restPosition: {x: -430, y: 170}
     restRotation: -4
     restScale: 1
@@ -35,8 +35,9 @@ MonoBehaviour:
     fromRotation: -14
     hold: 2.5
   - art: {fileID: 21300000, guid: 5c506c2f87a934ffeb8297ba3d309e44, type: 3}
-    caption: But the path across the canal is broken!
-    voiceKey: m3_story_open_2
+    caption: The path across is damaged -- let's help Abdul build his way and finish
+      the delivery!
+    voiceKey: abdul_story_2
     restPosition: {x: 150, y: 235}
     restRotation: 5
     restScale: 1
@@ -54,216 +55,216 @@ MonoBehaviour:
     fromRotation: -10
     hold: 3
   questions:
-  - type: 1
-    prompt: Find the number 1
-    promptVoiceKey: question_1
+  - type: 4
+    prompt: Tap the color Red
+    promptVoiceKey: question_colour_red
     promptArt: {fileID: 0}
     options:
     - art: {fileID: 0}
-      label: 1
-      useColour: 0
-      colour: {r: 1, g: 1, b: 1, a: 1}
-      voiceKey: 
+      label: Red
+      useColour: 1
+      colour: {r: 1, g: 0, b: 0, a: 1}
+      voiceKey: colour_red
     - art: {fileID: 0}
-      label: 4
-      useColour: 0
-      colour: {r: 1, g: 1, b: 1, a: 1}
-      voiceKey: 
+      label: Yellow
+      useColour: 1
+      colour: {r: 1, g: 1, b: 0, a: 1}
+      voiceKey: colour_yellow
     - art: {fileID: 0}
-      label: 7
-      useColour: 0
-      colour: {r: 1, g: 1, b: 1, a: 1}
-      voiceKey: 
+      label: Green
+      useColour: 1
+      colour: {r: 0, g: 1, b: 0, a: 1}
+      voiceKey: colour_green
     correctIndex: 0
-  - type: 1
-    prompt: Find the number 2
-    promptVoiceKey: question_2
+  - type: 4
+    prompt: Find the color Yellow
+    promptVoiceKey: question_colour_yellow
     promptArt: {fileID: 0}
     options:
     - art: {fileID: 0}
-      label: 5
-      useColour: 0
-      colour: {r: 1, g: 1, b: 1, a: 1}
-      voiceKey: 
+      label: Blue
+      useColour: 1
+      colour: {r: 0, g: 0.21960784, b: 1, a: 1}
+      voiceKey: colour_blue
     - art: {fileID: 0}
-      label: 2
-      useColour: 0
-      colour: {r: 1, g: 1, b: 1, a: 1}
-      voiceKey: 
+      label: Yellow
+      useColour: 1
+      colour: {r: 1, g: 1, b: 0, a: 1}
+      voiceKey: colour_yellow
     - art: {fileID: 0}
-      label: 9
-      useColour: 0
-      colour: {r: 1, g: 1, b: 1, a: 1}
-      voiceKey: 
+      label: Orange
+      useColour: 1
+      colour: {r: 1, g: 0.64705884, b: 0, a: 1}
+      voiceKey: colour_orange
     correctIndex: 1
-  - type: 1
-    prompt: Find the number 3
-    promptVoiceKey: question_3
+  - type: 4
+    prompt: Can you tap Green?
+    promptVoiceKey: question_colour_green
     promptArt: {fileID: 0}
     options:
     - art: {fileID: 0}
-      label: 8
-      useColour: 0
-      colour: {r: 1, g: 1, b: 1, a: 1}
-      voiceKey: 
+      label: Red
+      useColour: 1
+      colour: {r: 1, g: 0, b: 0, a: 1}
+      voiceKey: colour_red
     - art: {fileID: 0}
-      label: 1
-      useColour: 0
-      colour: {r: 1, g: 1, b: 1, a: 1}
-      voiceKey: 
+      label: Yellow
+      useColour: 1
+      colour: {r: 1, g: 1, b: 0, a: 1}
+      voiceKey: colour_yellow
     - art: {fileID: 0}
-      label: 3
-      useColour: 0
-      colour: {r: 1, g: 1, b: 1, a: 1}
-      voiceKey: 
+      label: Green
+      useColour: 1
+      colour: {r: 0, g: 1, b: 0, a: 1}
+      voiceKey: colour_green
     correctIndex: 2
-  - type: 1
-    prompt: Find the number 4
-    promptVoiceKey: question_4
+  - type: 4
+    prompt: Where is the color Blue?
+    promptVoiceKey: question_colour_blue
     promptArt: {fileID: 0}
     options:
     - art: {fileID: 0}
-      label: 4
-      useColour: 0
-      colour: {r: 1, g: 1, b: 1, a: 1}
-      voiceKey: 
+      label: Blue
+      useColour: 1
+      colour: {r: 0, g: 0.21960784, b: 1, a: 1}
+      voiceKey: colour_blue
     - art: {fileID: 0}
-      label: 2
-      useColour: 0
-      colour: {r: 1, g: 1, b: 1, a: 1}
-      voiceKey: 
+      label: Green
+      useColour: 1
+      colour: {r: 0, g: 1, b: 0, a: 1}
+      voiceKey: colour_green
     - art: {fileID: 0}
-      label: 10
-      useColour: 0
-      colour: {r: 1, g: 1, b: 1, a: 1}
-      voiceKey: 
+      label: Orange
+      useColour: 1
+      colour: {r: 1, g: 0.64705884, b: 0, a: 1}
+      voiceKey: colour_orange
     correctIndex: 0
-  - type: 1
-    prompt: Find the number 5
-    promptVoiceKey: question_5
+  - type: 4
+    prompt: Choose the color Orange
+    promptVoiceKey: question_colour_orange
     promptArt: {fileID: 0}
     options:
     - art: {fileID: 0}
-      label: 7
-      useColour: 0
-      colour: {r: 1, g: 1, b: 1, a: 1}
-      voiceKey: 
+      label: Red
+      useColour: 1
+      colour: {r: 1, g: 0, b: 0, a: 1}
+      voiceKey: colour_red
     - art: {fileID: 0}
-      label: 5
-      useColour: 0
-      colour: {r: 1, g: 1, b: 1, a: 1}
-      voiceKey: 
+      label: Orange
+      useColour: 1
+      colour: {r: 1, g: 0.64705884, b: 0, a: 1}
+      voiceKey: colour_orange
     - art: {fileID: 0}
-      label: 3
-      useColour: 0
-      colour: {r: 1, g: 1, b: 1, a: 1}
-      voiceKey: 
+      label: Blue
+      useColour: 1
+      colour: {r: 0, g: 0.21960784, b: 1, a: 1}
+      voiceKey: colour_blue
     correctIndex: 1
-  - type: 1
-    prompt: Find the number 6
-    promptVoiceKey: question_6
+  - type: 4
+    prompt: Tap the color Red
+    promptVoiceKey: question_colour_red
     promptArt: {fileID: 0}
     options:
     - art: {fileID: 0}
-      label: 1
-      useColour: 0
-      colour: {r: 1, g: 1, b: 1, a: 1}
-      voiceKey: 
+      label: Yellow
+      useColour: 1
+      colour: {r: 1, g: 1, b: 0, a: 1}
+      voiceKey: colour_yellow
     - art: {fileID: 0}
-      label: 8
-      useColour: 0
-      colour: {r: 1, g: 1, b: 1, a: 1}
-      voiceKey: 
+      label: Green
+      useColour: 1
+      colour: {r: 0, g: 1, b: 0, a: 1}
+      voiceKey: colour_green
     - art: {fileID: 0}
-      label: 6
-      useColour: 0
-      colour: {r: 1, g: 1, b: 1, a: 1}
-      voiceKey: 
+      label: Red
+      useColour: 1
+      colour: {r: 1, g: 0, b: 0, a: 1}
+      voiceKey: colour_red
     correctIndex: 2
-  - type: 1
-    prompt: Find the number 7
-    promptVoiceKey: question_7
+  - type: 4
+    prompt: Find the color Yellow
+    promptVoiceKey: question_colour_yellow
     promptArt: {fileID: 0}
     options:
     - art: {fileID: 0}
-      label: 7
-      useColour: 0
-      colour: {r: 1, g: 1, b: 1, a: 1}
-      voiceKey: 
+      label: Yellow
+      useColour: 1
+      colour: {r: 1, g: 1, b: 0, a: 1}
+      voiceKey: colour_yellow
     - art: {fileID: 0}
-      label: 10
-      useColour: 0
-      colour: {r: 1, g: 1, b: 1, a: 1}
-      voiceKey: 
+      label: Orange
+      useColour: 1
+      colour: {r: 1, g: 0.64705884, b: 0, a: 1}
+      voiceKey: colour_orange
     - art: {fileID: 0}
-      label: 2
-      useColour: 0
-      colour: {r: 1, g: 1, b: 1, a: 1}
-      voiceKey: 
+      label: Blue
+      useColour: 1
+      colour: {r: 0, g: 0.21960784, b: 1, a: 1}
+      voiceKey: colour_blue
     correctIndex: 0
-  - type: 1
-    prompt: Find the number 8
-    promptVoiceKey: question_8
+  - type: 4
+    prompt: Can you tap Green?
+    promptVoiceKey: question_colour_green
     promptArt: {fileID: 0}
     options:
     - art: {fileID: 0}
-      label: 3
-      useColour: 0
-      colour: {r: 1, g: 1, b: 1, a: 1}
-      voiceKey: 
+      label: Red
+      useColour: 1
+      colour: {r: 1, g: 0, b: 0, a: 1}
+      voiceKey: colour_red
     - art: {fileID: 0}
-      label: 8
-      useColour: 0
-      colour: {r: 1, g: 1, b: 1, a: 1}
-      voiceKey: 
+      label: Green
+      useColour: 1
+      colour: {r: 0, g: 1, b: 0, a: 1}
+      voiceKey: colour_green
     - art: {fileID: 0}
-      label: 5
-      useColour: 0
-      colour: {r: 1, g: 1, b: 1, a: 1}
-      voiceKey: 
+      label: Orange
+      useColour: 1
+      colour: {r: 1, g: 0.64705884, b: 0, a: 1}
+      voiceKey: colour_orange
     correctIndex: 1
-  - type: 1
-    prompt: Find the number 9
-    promptVoiceKey: question_9
+  - type: 4
+    prompt: Where is the color Blue?
+    promptVoiceKey: question_colour_blue
     promptArt: {fileID: 0}
     options:
     - art: {fileID: 0}
-      label: 4
-      useColour: 0
-      colour: {r: 1, g: 1, b: 1, a: 1}
-      voiceKey: 
+      label: Yellow
+      useColour: 1
+      colour: {r: 1, g: 1, b: 0, a: 1}
+      voiceKey: colour_yellow
     - art: {fileID: 0}
-      label: 2
-      useColour: 0
-      colour: {r: 1, g: 1, b: 1, a: 1}
-      voiceKey: 
+      label: Red
+      useColour: 1
+      colour: {r: 1, g: 0, b: 0, a: 1}
+      voiceKey: colour_red
     - art: {fileID: 0}
-      label: 9
-      useColour: 0
-      colour: {r: 1, g: 1, b: 1, a: 1}
-      voiceKey: 
+      label: Blue
+      useColour: 1
+      colour: {r: 0, g: 0.21960784, b: 1, a: 1}
+      voiceKey: colour_blue
     correctIndex: 2
-  - type: 1
-    prompt: Find the number 10
-    promptVoiceKey: question_10
+  - type: 4
+    prompt: Choose the color Orange
+    promptVoiceKey: question_colour_orange
     promptArt: {fileID: 0}
     options:
     - art: {fileID: 0}
-      label: 10
-      useColour: 0
-      colour: {r: 1, g: 1, b: 1, a: 1}
-      voiceKey: 
+      label: Orange
+      useColour: 1
+      colour: {r: 1, g: 0.64705884, b: 0, a: 1}
+      voiceKey: colour_orange
     - art: {fileID: 0}
-      label: 6
-      useColour: 0
-      colour: {r: 1, g: 1, b: 1, a: 1}
-      voiceKey: 
+      label: Green
+      useColour: 1
+      colour: {r: 0, g: 1, b: 0, a: 1}
+      voiceKey: colour_green
     - art: {fileID: 0}
-      label: 1
-      useColour: 0
-      colour: {r: 1, g: 1, b: 1, a: 1}
-      voiceKey: 
+      label: Blue
+      useColour: 1
+      colour: {r: 0, g: 0.21960784, b: 1, a: 1}
+      voiceKey: colour_blue
     correctIndex: 0
   questionsPerRun: 5
   missionIntroVoiceKey: m3_mission_intro
-  missionCompleteVoiceKey: m3_mission_complete
+  missionCompleteVoiceKey:

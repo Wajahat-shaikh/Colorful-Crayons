@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 namespace TMKOC.BridgeQuest
@@ -78,6 +79,48 @@ namespace TMKOC.BridgeQuest
             if (loader.GetClip(key) == null) return;
 
             loader.PlayRuntimeAudio(key);
+        }
+
+        /// <summary>
+        /// Same as <see cref="Play"/>, but if the clip isn't loaded yet (the category
+        /// bundle is still downloading/decoding -- most likely right after a scene
+        /// opens, before the first question's prompt), waits for it instead of
+        /// dropping the line silently. Mirrors BridgeQuestVoiceLinePlayer's own
+        /// load-wait handling for the storyboard, extended to any other one-off line
+        /// that can land before the bundle is ready.
+        ///
+        /// Needs a MonoBehaviour to host the wait coroutine on -- BridgeQuestVoice
+        /// itself is static, so it borrows the caller's (any live component works;
+        /// RuntimeAudioLoader is never edited).
+        /// </summary>
+        public static void PlayWhenReady(MonoBehaviour host, string key, float maxWait = 25f)
+        {
+            if (string.IsNullOrEmpty(key) || host == null) return;
+
+            RuntimeAudioLoader loader = RuntimeAudioLoader.Instance;
+            if (loader == null || loader._commonAudioSource == null) return;
+
+            if (loader.GetClip(key) != null)
+            {
+                loader.PlayRuntimeAudio(key);
+                return;
+            }
+
+            host.StartCoroutine(WaitForClipThenPlay(loader, key, maxWait));
+        }
+
+        private static IEnumerator WaitForClipThenPlay(RuntimeAudioLoader loader, string key, float maxWait)
+        {
+            float waited = 0f;
+            WaitForSecondsRealtime poll = new WaitForSecondsRealtime(0.15f);
+
+            while (loader.GetClip(key) == null && waited < maxWait)
+            {
+                waited += 0.15f;
+                yield return poll;
+            }
+
+            if (loader.GetClip(key) != null) loader.PlayRuntimeAudio(key);
         }
 
         /// <summary>

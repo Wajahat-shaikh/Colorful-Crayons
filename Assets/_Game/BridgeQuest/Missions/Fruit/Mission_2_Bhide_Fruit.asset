@@ -1,0 +1,464 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 501418a5dbfa143da8f4c469dbd42a68, type: 3}
+  m_Name: Mission_2_Bhide_Fruit
+  m_EditorClassIdentifier: 
+  missionNumber: 2
+  characterName: Bhide
+  destinationName: School
+  characterPortrait: {fileID: 0}
+  backgroundArt: {fileID: 0}
+  plankSprite: {fileID: 0}
+  plankSprites:
+  - {fileID: 21300000, guid: 3d6385bf6a5ca4a08843632015f9af68, type: 3}
+  - {fileID: 21300000, guid: f99e31eff763947328364b5f9ab8b1ea, type: 3}
+  - {fileID: 21300000, guid: eb96ead9e43cb4e7bb2f85724159d7b3, type: 3}
+  - {fileID: 21300000, guid: 1a64cd4f12d7b4104ab9c598f91fdca3, type: 3}
+  - {fileID: 21300000, guid: 3edba1848b9044d628a0e1f0b6f26a92, type: 3}
+  openingPanels:
+  - art: {fileID: 0}
+    caption: Bhide is carrying his books to school.
+    voiceKey: m2_story_open_1
+    restPosition: {x: -430, y: 170}
+    restRotation: -4
+    restScale: 1
+    fromOffset: {x: 0, y: 900}
+    fromRotation: -18
+    hold: 2.5
+  - art: {fileID: 0}
+    caption: But a stream has washed the road away!
+    voiceKey: m2_story_open_2
+    restPosition: {x: 150, y: 235}
+    restRotation: 5
+    restScale: 1
+    fromOffset: {x: 0, y: 900}
+    fromRotation: -18
+    hold: 2.5
+  - art: {fileID: 0}
+    caption: Help Bhide build a new bridge!
+    voiceKey: m2_story_open_3
+    restPosition: {x: -190, y: -190}
+    restRotation: 3
+    restScale: 1
+    fromOffset: {x: 0, y: 900}
+    fromRotation: -18
+    hold: 2.5
+  endingPanels:
+  - art: {fileID: 0}
+    caption: The bridge is finished!
+    voiceKey: m2_story_end_1
+    restPosition: {x: -430, y: 170}
+    restRotation: -4
+    restScale: 1
+    fromOffset: {x: 0, y: 900}
+    fromRotation: -18
+    hold: 2.5
+  - art: {fileID: 0}
+    caption: Bhide crosses the stream with his books.
+    voiceKey: m2_story_end_2
+    restPosition: {x: 150, y: 235}
+    restRotation: 5
+    restScale: 1
+    fromOffset: {x: 0, y: 900}
+    fromRotation: -18
+    hold: 2.5
+  - art: {fileID: 0}
+    caption: Bhide reaches school and rings the bell!
+    voiceKey: m2_story_end_3
+    restPosition: {x: -190, y: -190}
+    restRotation: 3
+    restScale: 1
+    fromOffset: {x: 0, y: 900}
+    fromRotation: -18
+    hold: 2.5
+  questions:
+  - type: 3
+    prompt: Let's find the Apple!
+    promptVoiceKey: question_fruit_apple
+    promptArt: {fileID: 0}
+    options:
+    - art: {fileID: 21300000, guid: 910841c21e5fdf44abf69b7604645a8e, type: 3}
+      label: Apple
+      useColour: 0
+      colour: {r: 1, g: 1, b: 1, a: 1}
+      voiceKey: fruit_apple
+    - art: {fileID: 21300000, guid: 403c1fdfc91209a47986797f0d7e59b5, type: 3}
+      label: Banana
+      useColour: 0
+      colour: {r: 1, g: 1, b: 1, a: 1}
+      voiceKey: fruit_banana
+    - art: {fileID: 21300000, guid: db2a56fea0e2ff6408cf47bdb2c10cc0, type: 3}
+      label: Blackberry
+      useColour: 0
+      colour: {r: 1, g: 1, b: 1, a: 1}
+      voiceKey: fruit_blackberry
+    correctIndex: 0
+  - type: 3
+    prompt: Can you find the Banana?
+    promptVoiceKey: question_fruit_banana
+    promptArt: {fileID: 0}
+    options:
+    - art: {fileID: 21300000, guid: db2a56fea0e2ff6408cf47bdb2c10cc0, type: 3}
+      label: Blackberry
+      useColour: 0
+      colour: {r: 1, g: 1, b: 1, a: 1}
+      voiceKey: fruit_blackberry
+    - art: {fileID: 21300000, guid: 403c1fdfc91209a47986797f0d7e59b5, type: 3}
+      label: Banana
+      useColour: 0
+      colour: {r: 1, g: 1, b: 1, a: 1}
+      voiceKey: fruit_banana
+    - art: {fileID: 21300000, guid: 7f7182ba4461f2f409bb1308f6d1313a, type: 3}
+      label: Cherry
+      useColour: 0
+      colour: {r: 1, g: 1, b: 1, a: 1}
+      voiceKey: fruit_cherry
+    correctIndex: 1
+  - type: 3
+    prompt: Can you spot the Blackberry?
+    promptVoiceKey: question_fruit_blackberry
+    promptArt: {fileID: 0}
+    options:
+    - art: {fileID: 21300000, guid: 7f7182ba4461f2f409bb1308f6d1313a, type: 3}
+      label: Cherry
+      useColour: 0
+      colour: {r: 1, g: 1, b: 1, a: 1}
+      voiceKey: fruit_cherry
+    - art: {fileID: 21300000, guid: 98a4cd31a76f22e41ae210384ce5f7cd, type: 3}
+      label: Coconut
+      useColour: 0
+      colour: {r: 1, g: 1, b: 1, a: 1}
+      voiceKey: fruit_coconut
+    - art: {fileID: 21300000, guid: db2a56fea0e2ff6408cf47bdb2c10cc0, type: 3}
+      label: Blackberry
+      useColour: 0
+      colour: {r: 1, g: 1, b: 1, a: 1}
+      voiceKey: fruit_blackberry
+    correctIndex: 2
+  - type: 3
+    prompt: Which one is the Cherry?
+    promptVoiceKey: question_fruit_cherry
+    promptArt: {fileID: 0}
+    options:
+    - art: {fileID: 21300000, guid: 7f7182ba4461f2f409bb1308f6d1313a, type: 3}
+      label: Cherry
+      useColour: 0
+      colour: {r: 1, g: 1, b: 1, a: 1}
+      voiceKey: fruit_cherry
+    - art: {fileID: 21300000, guid: 98a4cd31a76f22e41ae210384ce5f7cd, type: 3}
+      label: Coconut
+      useColour: 0
+      colour: {r: 1, g: 1, b: 1, a: 1}
+      voiceKey: fruit_coconut
+    - art: {fileID: 21300000, guid: f0d7fa3aa07d3a1498564cadff6df4c2, type: 3}
+      label: Custard Apple
+      useColour: 0
+      colour: {r: 1, g: 1, b: 1, a: 1}
+      voiceKey: fruit_custard_apple
+    correctIndex: 0
+  - type: 3
+    prompt: Can you find the Coconut?
+    promptVoiceKey: question_fruit_coconut
+    promptArt: {fileID: 0}
+    options:
+    - art: {fileID: 21300000, guid: f0d7fa3aa07d3a1498564cadff6df4c2, type: 3}
+      label: Custard Apple
+      useColour: 0
+      colour: {r: 1, g: 1, b: 1, a: 1}
+      voiceKey: fruit_custard_apple
+    - art: {fileID: 21300000, guid: 98a4cd31a76f22e41ae210384ce5f7cd, type: 3}
+      label: Coconut
+      useColour: 0
+      colour: {r: 1, g: 1, b: 1, a: 1}
+      voiceKey: fruit_coconut
+    - art: {fileID: 21300000, guid: 97d9e3d6ef7f884479e070425cd23861, type: 3}
+      label: Fig
+      useColour: 0
+      colour: {r: 1, g: 1, b: 1, a: 1}
+      voiceKey: fruit_fig
+    correctIndex: 1
+  - type: 3
+    prompt: Let's find the Custard Apple!
+    promptVoiceKey: question_fruit_custard_apple
+    promptArt: {fileID: 0}
+    options:
+    - art: {fileID: 21300000, guid: 97d9e3d6ef7f884479e070425cd23861, type: 3}
+      label: Fig
+      useColour: 0
+      colour: {r: 1, g: 1, b: 1, a: 1}
+      voiceKey: fruit_fig
+    - art: {fileID: 21300000, guid: 4df62380728b3744eb415d375727f0c7, type: 3}
+      label: Guava
+      useColour: 0
+      colour: {r: 1, g: 1, b: 1, a: 1}
+      voiceKey: fruit_guava
+    - art: {fileID: 21300000, guid: f0d7fa3aa07d3a1498564cadff6df4c2, type: 3}
+      label: Custard Apple
+      useColour: 0
+      colour: {r: 1, g: 1, b: 1, a: 1}
+      voiceKey: fruit_custard_apple
+    correctIndex: 2
+  - type: 3
+    prompt: Can you find the Fig?
+    promptVoiceKey: question_fruit_fig
+    promptArt: {fileID: 0}
+    options:
+    - art: {fileID: 21300000, guid: 97d9e3d6ef7f884479e070425cd23861, type: 3}
+      label: Fig
+      useColour: 0
+      colour: {r: 1, g: 1, b: 1, a: 1}
+      voiceKey: fruit_fig
+    - art: {fileID: 21300000, guid: 4df62380728b3744eb415d375727f0c7, type: 3}
+      label: Guava
+      useColour: 0
+      colour: {r: 1, g: 1, b: 1, a: 1}
+      voiceKey: fruit_guava
+    - art: {fileID: 21300000, guid: fbcae77a5d1d3a944a01e31df60856d8, type: 3}
+      label: Grapes
+      useColour: 0
+      colour: {r: 1, g: 1, b: 1, a: 1}
+      voiceKey: fruit_grapes
+    correctIndex: 0
+  - type: 3
+    prompt: Can you spot the Guava?
+    promptVoiceKey: question_fruit_guava
+    promptArt: {fileID: 0}
+    options:
+    - art: {fileID: 21300000, guid: fbcae77a5d1d3a944a01e31df60856d8, type: 3}
+      label: Grapes
+      useColour: 0
+      colour: {r: 1, g: 1, b: 1, a: 1}
+      voiceKey: fruit_grapes
+    - art: {fileID: 21300000, guid: 4df62380728b3744eb415d375727f0c7, type: 3}
+      label: Guava
+      useColour: 0
+      colour: {r: 1, g: 1, b: 1, a: 1}
+      voiceKey: fruit_guava
+    - art: {fileID: 21300000, guid: 910841c21e5fdf44abf69b7604645a8e, type: 3}
+      label: Apple
+      useColour: 0
+      colour: {r: 1, g: 1, b: 1, a: 1}
+      voiceKey: fruit_apple
+    correctIndex: 1
+  - type: 3
+    prompt: Which one is the Grapes?
+    promptVoiceKey: question_fruit_grapes
+    promptArt: {fileID: 0}
+    options:
+    - art: {fileID: 21300000, guid: 4df62380728b3744eb415d375727f0c7, type: 3}
+      label: Guava
+      useColour: 0
+      colour: {r: 1, g: 1, b: 1, a: 1}
+      voiceKey: fruit_guava
+    - art: {fileID: 21300000, guid: 5c41fec34394721498d3671fab328ffc, type: 3}
+      label: Jackfruit
+      useColour: 0
+      colour: {r: 1, g: 1, b: 1, a: 1}
+      voiceKey: fruit_jackfruit
+    - art: {fileID: 21300000, guid: fbcae77a5d1d3a944a01e31df60856d8, type: 3}
+      label: Grapes
+      useColour: 0
+      colour: {r: 1, g: 1, b: 1, a: 1}
+      voiceKey: fruit_grapes
+    correctIndex: 2
+  - type: 3
+    prompt: Let's find the Jackfruit!
+    promptVoiceKey: question_fruit_jackfruit
+    promptArt: {fileID: 0}
+    options:
+    - art: {fileID: 21300000, guid: c7ab3db7cc1306b4cba1fb465cd9a637, type: 3}
+      label: Lemon
+      useColour: 0
+      colour: {r: 1, g: 1, b: 1, a: 1}
+      voiceKey: fruit_lemon
+    - art: {fileID: 21300000, guid: 5c41fec34394721498d3671fab328ffc, type: 3}
+      label: Jackfruit
+      useColour: 0
+      colour: {r: 1, g: 1, b: 1, a: 1}
+      voiceKey: fruit_jackfruit
+    - art: {fileID: 21300000, guid: 02d54e94f829744419d30158dfc0922e, type: 3}
+      label: Mango
+      useColour: 0
+      colour: {r: 1, g: 1, b: 1, a: 1}
+      voiceKey: fruit_mango
+    correctIndex: 1
+  - type: 3
+    prompt: Can you find the Lemon?
+    promptVoiceKey: question_fruit_lemon
+    promptArt: {fileID: 0}
+    options:
+    - art: {fileID: 21300000, guid: c508ff2ccf29dd345a535a3ee8855a36, type: 3}
+      label: Papaya
+      useColour: 0
+      colour: {r: 1, g: 1, b: 1, a: 1}
+      voiceKey: fruit_papaya
+    - art: {fileID: 21300000, guid: 02d54e94f829744419d30158dfc0922e, type: 3}
+      label: Mango
+      useColour: 0
+      colour: {r: 1, g: 1, b: 1, a: 1}
+      voiceKey: fruit_mango
+    - art: {fileID: 21300000, guid: c7ab3db7cc1306b4cba1fb465cd9a637, type: 3}
+      label: Lemon
+      useColour: 0
+      colour: {r: 1, g: 1, b: 1, a: 1}
+      voiceKey: fruit_lemon
+    correctIndex: 2
+  - type: 3
+    prompt: Which one is the Mango?
+    promptVoiceKey: question_fruit_mango
+    promptArt: {fileID: 0}
+    options:
+    - art: {fileID: 21300000, guid: 4e0dfe3a0e5411a47aa00152d6bb2e7c, type: 3}
+      label: Orange
+      useColour: 0
+      colour: {r: 1, g: 1, b: 1, a: 1}
+      voiceKey: fruit_orange
+    - art: {fileID: 21300000, guid: 02d54e94f829744419d30158dfc0922e, type: 3}
+      label: Mango
+      useColour: 0
+      colour: {r: 1, g: 1, b: 1, a: 1}
+      voiceKey: fruit_mango
+    - art: {fileID: 21300000, guid: c508ff2ccf29dd345a535a3ee8855a36, type: 3}
+      label: Papaya
+      useColour: 0
+      colour: {r: 1, g: 1, b: 1, a: 1}
+      voiceKey: fruit_papaya
+    correctIndex: 1
+  - type: 3
+    prompt: Can you find the Orange?
+    promptVoiceKey: question_fruit_orange
+    promptArt: {fileID: 0}
+    options:
+    - art: {fileID: 21300000, guid: c508ff2ccf29dd345a535a3ee8855a36, type: 3}
+      label: Papaya
+      useColour: 0
+      colour: {r: 1, g: 1, b: 1, a: 1}
+      voiceKey: fruit_papaya
+    - art: {fileID: 21300000, guid: 8b52290f9f3f3e749b0025355ef1818f, type: 3}
+      label: Pear
+      useColour: 0
+      colour: {r: 1, g: 1, b: 1, a: 1}
+      voiceKey: fruit_pear
+    - art: {fileID: 21300000, guid: 4e0dfe3a0e5411a47aa00152d6bb2e7c, type: 3}
+      label: Orange
+      useColour: 0
+      colour: {r: 1, g: 1, b: 1, a: 1}
+      voiceKey: fruit_orange
+    correctIndex: 2
+  - type: 3
+    prompt: Let's find the Papaya!
+    promptVoiceKey: question_fruit_papaya
+    promptArt: {fileID: 0}
+    options:
+    - art: {fileID: 21300000, guid: c508ff2ccf29dd345a535a3ee8855a36, type: 3}
+      label: Papaya
+      useColour: 0
+      colour: {r: 1, g: 1, b: 1, a: 1}
+      voiceKey: fruit_papaya
+    - art: {fileID: 21300000, guid: 8b52290f9f3f3e749b0025355ef1818f, type: 3}
+      label: Pear
+      useColour: 0
+      colour: {r: 1, g: 1, b: 1, a: 1}
+      voiceKey: fruit_pear
+    - art: {fileID: 21300000, guid: 9224c23d02bb38b458f908bca6f004d1, type: 3}
+      label: Pineapple
+      useColour: 0
+      colour: {r: 1, g: 1, b: 1, a: 1}
+      voiceKey: fruit_pineapple
+    correctIndex: 0
+  - type: 3
+    prompt: Can you find the Pear?
+    promptVoiceKey: question_fruit_pear
+    promptArt: {fileID: 0}
+    options:
+    - art: {fileID: 21300000, guid: 9224c23d02bb38b458f908bca6f004d1, type: 3}
+      label: Pineapple
+      useColour: 0
+      colour: {r: 1, g: 1, b: 1, a: 1}
+      voiceKey: fruit_pineapple
+    - art: {fileID: 21300000, guid: 8b52290f9f3f3e749b0025355ef1818f, type: 3}
+      label: Pear
+      useColour: 0
+      colour: {r: 1, g: 1, b: 1, a: 1}
+      voiceKey: fruit_pear
+    - art: {fileID: 21300000, guid: 7adb01213a81dff4898c16e5f3390a36, type: 3}
+      label: Pomegranate
+      useColour: 0
+      colour: {r: 1, g: 1, b: 1, a: 1}
+      voiceKey: fruit_pomegranate
+    correctIndex: 1
+  - type: 3
+    prompt: Can you spot the Pineapple?
+    promptVoiceKey: question_fruit_pineapple
+    promptArt: {fileID: 0}
+    options:
+    - art: {fileID: 21300000, guid: 7adb01213a81dff4898c16e5f3390a36, type: 3}
+      label: Pomegranate
+      useColour: 0
+      colour: {r: 1, g: 1, b: 1, a: 1}
+      voiceKey: fruit_pomegranate
+    - art: {fileID: 21300000, guid: 2166a02a876ba9a41a6c4abc8f38d836, type: 3}
+      label: Watermelon
+      useColour: 0
+      colour: {r: 1, g: 1, b: 1, a: 1}
+      voiceKey: fruit_watermelon
+    - art: {fileID: 21300000, guid: 9224c23d02bb38b458f908bca6f004d1, type: 3}
+      label: Pineapple
+      useColour: 0
+      colour: {r: 1, g: 1, b: 1, a: 1}
+      voiceKey: fruit_pineapple
+    correctIndex: 2
+  - type: 3
+    prompt: Which one is the Pomegranate?
+    promptVoiceKey: question_fruit_pomegranate
+    promptArt: {fileID: 0}
+    options:
+    - art: {fileID: 21300000, guid: 7adb01213a81dff4898c16e5f3390a36, type: 3}
+      label: Pomegranate
+      useColour: 0
+      colour: {r: 1, g: 1, b: 1, a: 1}
+      voiceKey: fruit_pomegranate
+    - art: {fileID: 21300000, guid: 2166a02a876ba9a41a6c4abc8f38d836, type: 3}
+      label: Watermelon
+      useColour: 0
+      colour: {r: 1, g: 1, b: 1, a: 1}
+      voiceKey: fruit_watermelon
+    - art: {fileID: 21300000, guid: 910841c21e5fdf44abf69b7604645a8e, type: 3}
+      label: Apple
+      useColour: 0
+      colour: {r: 1, g: 1, b: 1, a: 1}
+      voiceKey: fruit_apple
+    correctIndex: 0
+  - type: 3
+    prompt: Can you find the Watermelon?
+    promptVoiceKey: question_fruit_watermelon
+    promptArt: {fileID: 0}
+    options:
+    - art: {fileID: 21300000, guid: 910841c21e5fdf44abf69b7604645a8e, type: 3}
+      label: Apple
+      useColour: 0
+      colour: {r: 1, g: 1, b: 1, a: 1}
+      voiceKey: fruit_apple
+    - art: {fileID: 21300000, guid: 2166a02a876ba9a41a6c4abc8f38d836, type: 3}
+      label: Watermelon
+      useColour: 0
+      colour: {r: 1, g: 1, b: 1, a: 1}
+      voiceKey: fruit_watermelon
+    - art: {fileID: 21300000, guid: 403c1fdfc91209a47986797f0d7e59b5, type: 3}
+      label: Banana
+      useColour: 0
+      colour: {r: 1, g: 1, b: 1, a: 1}
+      voiceKey: fruit_banana
+    correctIndex: 1
+  questionsPerRun: 5
+  missionIntroVoiceKey: m1_mission_intro
+  missionCompleteVoiceKey:

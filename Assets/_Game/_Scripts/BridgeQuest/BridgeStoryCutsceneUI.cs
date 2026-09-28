@@ -22,7 +22,7 @@ namespace TMKOC.BridgeQuest
     /// child can tap to hurry to the next panel, or hit Skip to drop straight through.
     /// <see cref="IsPlaying"/> is what BridgeQuestTutorial waits on.
     /// </summary>
-    public class BridgeStoryCutsceneUI : MonoBehaviour
+    public class BridgeStoryCutsceneUI : MonoBehaviour, IStoryboardPlayer
     {
         // refcounted rather than a bool: nothing stops a second storyboard being
         // queued while one is closing, and a bool would race on that
@@ -55,6 +55,9 @@ namespace TMKOC.BridgeQuest
 
         [Tooltip("Safety cap on how long a panel may be held waiting for its narration. Zero disables the cap.")]
         [SerializeField] private float maxVoiceWait = 20f;
+
+        [Tooltip("RuntimeAudioLoader downloads/decodes its bundle over several frames, so a line asked for right at scene start can find its clip not there yet. This is how long SpeakPanel waits for a clip to finish loading before giving up on that line -- separate from maxVoiceWait, which caps a line already playing.")]
+        [SerializeField] private float maxAudioLoadWait = 8f;
 
 
         [Header("Layout")]
@@ -224,11 +227,7 @@ namespace TMKOC.BridgeQuest
             rt.localScale = Vector3.one * (p.restScale * 0.8f);
 
             // the line is spoken as the card flies in, so narration lands with the picture
-            float voiceLength = BridgeQuestVoice.PlayAndGetLength(p.voiceKey);
-            if (maxVoiceWait > 0f) voiceLength = Mathf.Min(voiceLength, maxVoiceWait);
-            voiceEndsAt = voiceLength > 0f
-                ? Time.unscaledTime + voiceLength + postVoicePause
-                : 0f;
+            StartCoroutine(SpeakPanel(p));
 
             if (captionText != null)
             {
@@ -258,6 +257,70 @@ namespace TMKOC.BridgeQuest
             rt.localRotation = Quaternion.Euler(0f, 0f, p.restRotation);
             rt.localScale = Vector3.one * p.restScale;
             if (captionText != null) captionText.alpha = 1f;
+        }
+
+        /// <summary>
+        /// Speaks a panel's line(s) and keeps voiceEndsAt current as it goes. Most
+        /// panels carry one line, same as always. When voiceKey2 is also set, this
+        /// waits out the first line for real (not just a computed timestamp -- the
+        /// second line has to actually be told to play once the first one finishes,
+        /// not before), then plays the second and extends voiceEndsAt again -- so one
+        /// card can carry two beats of narration without a second card flying in
+        /// between them.
+        /// </summary>
+        private IEnumerator SpeakPanel(StoryPanel p)
+        {
+            bool hasSecond = !string.IsNullOrEmpty(p.voiceKey2);
+
+            yield return WaitForClipReady(p.voiceKey);
+            float length1 = BridgeQuestVoice.PlayAndGetLength(p.voiceKey);
+            if (maxVoiceWait > 0f) length1 = Mathf.Min(length1, maxVoiceWait);
+
+            if (length1 > 0f)
+            {
+                float firstEndsAt = Time.unscaledTime + length1;
+                voiceEndsAt = hasSecond ? firstEndsAt : firstEndsAt + postVoicePause;
+
+                if (hasSecond)
+                {
+                    while (Time.unscaledTime < firstEndsAt) yield return null;
+                }
+            }
+            else
+            {
+                voiceEndsAt = hasSecond ? Time.unscaledTime : 0f;
+            }
+
+            if (!hasSecond) yield break;
+
+            yield return WaitForClipReady(p.voiceKey2);
+            float length2 = BridgeQuestVoice.PlayAndGetLength(p.voiceKey2);
+            if (maxVoiceWait > 0f) length2 = Mathf.Min(length2, maxVoiceWait);
+            voiceEndsAt = length2 > 0f
+                ? Time.unscaledTime + length2 + postVoicePause
+                : Time.unscaledTime + postVoicePause;
+        }
+
+        /// <summary>
+        /// Holds until RuntimeAudioLoader actually has this key's clip, or
+        /// maxAudioLoadWait runs out -- so a line asked for before the bundle has
+        /// finished downloading/decoding is spoken once it arrives instead of being
+        /// silently dropped by BridgeQuestVoice's usual fail-quiet contract.
+        /// </summary>
+        private IEnumerator WaitForClipReady(string key)
+        {
+            if (string.IsNullOrEmpty(key)) yield break;
+
+            RuntimeAudioLoader loader = RuntimeAudioLoader.Instance;
+            if (loader == null) yield break;
+
+            float waited = 0f;
+            WaitForSecondsRealtime poll = new WaitForSecondsRealtime(0.15f);
+            while (loader.GetClip(key) == null && waited < maxAudioLoadWait)
+            {
+                waited += 0.15f;
+                yield return poll;
+            }
         }
 
         /// <summary>

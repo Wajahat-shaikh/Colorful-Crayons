@@ -25,18 +25,21 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 1a64cd4f12d7b4104ab9c598f91fdca3, type: 3}
   - {fileID: 21300000, guid: 3edba1848b9044d628a0e1f0b6f26a92, type: 3}
   openingPanels:
-  - art: {fileID: 21300000, guid: 58163a7e9b17b43d283d1f079bb37b40, type: 3}
-    caption: But a river blocks the path!
-    voiceKey: m1_story_open_01
+  - art: {fileID: 21300000, guid: b1b3b063bb8a243419d80e8b336285fc, type: 3}
+    caption: Tapu is off to meet Tapu Sena at the playground. But a river blocks
+      the path!
+    voiceKey: m1_story_open_1_Revamped
+    voiceKey2: 
     restPosition: {x: -330, y: 190}
     restRotation: -4
     restScale: 0.8
     fromOffset: {x: -1000, y: 120}
     fromRotation: -14
     hold: 2.5
-  - art: {fileID: 21300000, guid: 9b4ada7a0eb2648adae7f29ea11ffd10, type: 3}
+  - art: {fileID: 21300000, guid: 96d10b0b0d6304c678851d3c1efef0bb, type: 3}
     caption: The wooden bridge is missing. Can you help build it?
     voiceKey: m1_story_open_3
+    voiceKey2: 
     restPosition: {x: 330, y: -60}
     restRotation: 4
     restScale: 0.8
@@ -47,6 +50,7 @@ MonoBehaviour:
   - art: {fileID: 21300000, guid: fd402d93c6b54424f8b8775fb06cfe24, type: 3}
     caption: Tapu walks safely across the river.
     voiceKey: m1_story_end_2
+    voiceKey2: 
     restPosition: {x: 0, y: 80}
     restRotation: 0
     restScale: 1.25
@@ -182,7 +186,7 @@ MonoBehaviour:
     correctIndex: 2
   - type: 1
     prompt: Find the number 7
-    promptVoiceKey: question_07
+    promptVoiceKey: question_7
     promptArt: {fileID: 0}
     options:
     - art: {fileID: 0}
@@ -266,4 +270,4 @@ MonoBehaviour:
     correctIndex: 0
   questionsPerRun: 5
   missionIntroVoiceKey: m1_mission_intro
-  missionCompleteVoiceKey: m1_mission_complete
+  missionCompleteVoiceKey:
